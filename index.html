@@ -45,7 +45,7 @@ fbq('track', 'PageView');
   --fs-small: .875rem;
   --fs-h3: 1.1875rem;
   --fs-h2: clamp(1.625rem, 1.1rem + 2.2vw, 2.375rem);
-  --fs-h1: clamp(1.75rem, 1.1rem + 2.8vw, 2.875rem);
+  --fs-h1: clamp(1.375rem, 1.05rem + 1.5vw, 2rem);
   --radius: 14px;
 }
 *{box-sizing:border-box}
@@ -124,7 +124,7 @@ body{padding-top:calc(80px + env(safe-area-inset-top, 0px))}
 .hero__logo{width:clamp(170px, 26vw, 240px); aspect-ratio:930/600; margin:0 auto 28px}
 
 .hero{padding-block:clamp(28px, 5vw, 48px) clamp(48px, 7vw, 80px)}
-.hero h1{max-width:820px; margin-inline:auto; text-align:center}
+.hero h1{max-width:680px; margin-inline:auto; text-align:center}
 .vsl{
   position:relative; width:100%; max-width:860px; margin:32px auto 0;
   aspect-ratio:16/9; border-radius:18px; overflow:hidden;
@@ -335,7 +335,7 @@ body{padding-top:calc(80px + env(safe-area-inset-top, 0px))}
 .seals svg{width:15px; height:15px; color:var(--cta)}
 .seals{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:18px; font-size:.8rem; color:var(--ink); text-align:left}
 .seals span{padding:9px 10px; border:1px solid var(--line); border-radius:10px; font-weight:500}
-.processor{margin-top:10px; font-size:.75rem; color:var(--muted)}
+.processor{margin-top:14px; font-size:.75rem; color:var(--muted)}
 .price .note{margin-top:16px; font-size:.9rem; color:var(--muted); font-style:italic; line-height:1.5}
 .price .note strong{color:var(--ink)}
 
@@ -613,12 +613,6 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
         <p class="big"><small>12x de </small><span data-cfg="parcela">R$ 30,72</span></p>
         <p class="cash">ou <strong><span data-cfg="avista">R$ 297</span> à vista</strong></p>
         <a class="btn js-checkout" href="#oferta">Quero tocar piano hoje</a>
-        <div class="seals">
-          <span><svg viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.6"/></svg>Compra segura</span>
-          <span><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.8l5 2v4c0 3.2-2.2 5.4-5 6.4-2.8-1-5-3.2-5-6.4v-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Privacidade garantida</span>
-          <span><svg viewBox="0 0 16 16" fill="none"><rect x="1.8" y="3.5" width="12.4" height="9" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M1.8 6.6h12.4" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 10h2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Cartão em até 12x</span>
-          <span><svg viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 105-5H5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6.5 1.2L4.6 3l1.9 1.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>7 dias de garantia</span>
-        </div>
         <p class="processor">Pagamento processado pela Hotmart</p>
         <p class="note"><strong>Menos do que um mês de aula particular</strong> de piano, com cada aula disponível pra você rever quantas vezes quiser.</p>
       </div>
@@ -671,6 +665,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
    CONFIGURAÇÃO — troque só estes valores
    ========================================================= */
 var CONFIG = {
+  delayAtivo: false,          // true = esconde as dobras até o tempo abaixo | false = mostra tudo (suspenso)
   revealAfterSeconds: 1135,   // 18:55 do vídeo = 18*60 + 55
   checkoutUrl: "https://pay.hotmart.com/C104108087F?off=ot7cpxjg",
   whatsappUrl: "https://wa.me/5511998362480",
@@ -736,7 +731,7 @@ var CONFIG = {
   }
   var seen = false; try { seen = localStorage.getItem(KEY) === "1"; } catch(e){}
   var seenBefore = seen;
-  if (seen) reveal();
+  if (seen || !CONFIG.delayAtivo) { seenBefore = true; reveal(); }
 
   // Player Vturb (embed oficial) + liberação aos 18:55 do vídeo
   var s = document.createElement("script");
