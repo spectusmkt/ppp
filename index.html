@@ -107,16 +107,6 @@ a{color:inherit}
 /* ===== BLOCO 1 ===== */
 /* Conteúdo escondido até o momento da oferta na VSL */
 .esconder{display:none}
-/* Barra fixa */
-.topbar{
-  position:fixed; top:0; left:0; right:0; z-index:50;
-  padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
-  background:rgba(34,30,25,.96); border-bottom:1px solid rgba(255,255,255,.08);
-  display:flex; justify-content:center;
-  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-}
-.topbar__logo{width:92px; aspect-ratio:930/600}
-body{padding-top:calc(80px + env(safe-area-inset-top, 0px))}
 /* Player vertical da Vturb */
 .vsl-v{width:100%; max-width:400px; margin:28px auto 0; border-radius:18px; overflow:hidden; box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
 .vsl-note{font-size:.8rem; color:var(--on-night-muted); text-align:center; padding:10px 12px; background:var(--night-2)}
@@ -168,41 +158,82 @@ body{padding-top:calc(80px + env(safe-area-inset-top, 0px))}
 }
 .check svg{width:16px; height:16px}
 
-/* Mockup de aparelhos */
-.devices{position:relative; padding:0 0 28px 0; max-width:560px; margin-inline:auto; width:100%}
+/* Mosaico das aulas: blocos de tamanhos diferentes, todos em 16:9, que crescem ao passar o mouse */
+.mosaic-wrap{container-type:inline-size; max-width:560px; margin-inline:auto; width:100%}
+.mosaic{
+  --g:8px; --p:10px;
+  --w:calc((100cqw - 2 * var(--p) - 5 * var(--g)) / 6);
+  display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--g);
+  grid-auto-rows:calc(((2 * var(--w) + var(--g)) * 9 / 16 - 3 * var(--g)) / 4);
+  padding:var(--p); background:#181818; border-radius:16px; box-shadow:0 24px 50px -28px rgba(34,30,25,.7);
+}
+/* posição de cada aula no mosaico (coluna / linha) */
+.tile:nth-child(1){grid-area:1 / 1 / 9 / 5}
+.tile:nth-child(2){grid-area:1 / 5 / 5 / 7}
+.tile:nth-child(3){grid-area:5 / 5 / 9 / 7}
+.tile:nth-child(4){grid-area:9 / 1 / 15 / 4}
+.tile:nth-child(5){grid-area:9 / 4 / 15 / 7}
+.tile:nth-child(6){grid-area:15 / 1 / 19 / 3}
+.tile:nth-child(7){grid-area:15 / 3 / 19 / 5}
+.tile:nth-child(8){grid-area:15 / 5 / 19 / 7}
+.tile:nth-child(9){grid-area:19 / 1 / 23 / 3}
+.tile:nth-child(10){grid-area:23 / 1 / 27 / 3}
+.tile:nth-child(11){grid-area:19 / 3 / 27 / 7}
+.tile:nth-child(12){grid-area:27 / 1 / 31 / 3}
+.tile:nth-child(13){grid-area:27 / 3 / 31 / 5}
+.tile:nth-child(14){grid-area:27 / 5 / 31 / 7}
+.tile{
+  position:relative; border-radius:8px; overflow:hidden; min-width:0; z-index:0;
+  background:linear-gradient(140deg,#A89C88,#6B604F); color:#fff;
+  display:flex; flex-direction:column; justify-content:flex-end; gap:2px; padding:8px;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, filter .35s;
+  outline:none;
+}
+.tile:nth-child(3n+2){background:linear-gradient(140deg,#8E8270,#4E463B)}
+.tile:nth-child(3n){background:linear-gradient(140deg,#B7AC99,#7C705E)}
+.tile.game{background:linear-gradient(140deg,#3B342C,#221E19)}
+.tile em{font-style:normal; font-weight:700; font-size:1.25rem; line-height:1; opacity:.92}
+.tile b{font-weight:600; font-size:.7rem; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.tile small{display:none}
+.tile--big{padding:16px}
+.tile--big em{font-size:2.5rem}
+.tile--big b{font-size:1rem}
+.tile--big small{display:block; font-size:.8125rem; opacity:.8}
+.tile > .media{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.tile.has-media > :not(.media){visibility:hidden}
+/* zoom: a aula sob o mouse (ou tocada no celular) cresce e as outras escurecem */
+.tile:focus-visible, .tile.is-on{transform:scale(1.35); z-index:3; box-shadow:0 22px 44px -12px rgba(0,0,0,.75)}
+.tile--big:focus-visible, .tile--big.is-on{transform:scale(1.08)}
+.tile:nth-child(4):focus-visible, .tile:nth-child(4).is-on, .tile:nth-child(5):focus-visible, .tile:nth-child(5).is-on{transform:scale(1.2)}
+.tile:nth-child(11):focus-visible, .tile:nth-child(11).is-on{transform:scale(1.1)}
+.mosaic.has-on .tile:not(.is-on){filter:brightness(.55) saturate(.8)}
+@media (hover:hover){
+  .tile{cursor:zoom-in}
+  .tile:hover{transform:scale(1.35); z-index:3; box-shadow:0 22px 44px -12px rgba(0,0,0,.75)}
+  .tile--big:hover{transform:scale(1.08)}
+  .tile:nth-child(4):hover, .tile:nth-child(5):hover{transform:scale(1.2)}
+  .tile:nth-child(11):hover{transform:scale(1.1)}
+  .mosaic:hover .tile:not(:hover){filter:brightness(.55) saturate(.8)}
+}
+/* aulas nas bordas crescem para dentro do mosaico */
+.tile:nth-child(2), .tile:nth-child(3), .tile:nth-child(5), .tile:nth-child(8), .tile:nth-child(11), .tile:nth-child(14){transform-origin:right center}
+.tile:nth-child(4), .tile:nth-child(6), .tile:nth-child(9), .tile:nth-child(10), .tile:nth-child(12){transform-origin:left center}
+.tile:nth-child(12){transform-origin:left bottom}
+.tile:nth-child(13){transform-origin:center bottom}
+.tile:nth-child(14){transform-origin:right bottom}
+.tile:nth-child(1){transform-origin:left top}
+@media (max-width:420px){ .mosaic{--g:5px; --p:6px; border-radius:12px} .tile{border-radius:5px; padding:6px} .tile b{font-size:.625rem} }
+@media (prefers-reduced-motion:reduce){ .tile{transition:none} }
+
+/* Telas com print real da plataforma */
 .laptop__screen{
   background:#1B1814; border:10px solid #2C2925; border-bottom-width:14px; border-radius:14px 14px 4px 4px;
   aspect-ratio:16/10; overflow:hidden;
 }
 .laptop__base{height:12px; background:linear-gradient(#D7D9E3,#B9BCCB); border-radius:0 0 12px 12px; margin:0 -5%}
-.phone{
-  position:absolute; right:-2%; bottom:0; width:27%; aspect-ratio:9/19;
-  background:#1B1814; border:6px solid #2C2925; border-radius:22px; overflow:hidden;
-  box-shadow:0 20px 40px -18px rgba(20,22,43,.6);
-}
-.app{display:grid; grid-template-columns:1.7fr 1fr; height:100%; font-size:clamp(6px, 1.1vw, 9px); color:#E6E0D6}
-.app__main{display:flex; flex-direction:column; padding:6%; gap:6%}
-.cover{
-  flex:1; border-radius:6px; background:var(--brand); position:relative; overflow:hidden;
-  display:flex; align-items:center; justify-content:center; padding:10%;
-}
-.cover__keys{position:absolute; left:0; right:0; top:0; height:38%; display:flex; gap:2px; padding:0 8%; opacity:.9}
-.cover__keys i{flex:1; background:#F7F4EF; border-radius:0 0 2px 2px; position:relative}
-.cover__keys i.b::after{content:""; position:absolute; right:-35%; top:0; width:70%; height:62%; background:#1B1814; border-radius:0 0 2px 2px; z-index:1}
-.cover__t{font-weight:700; font-size:1.9em; line-height:1.05; color:#fff}
-.cover__s{opacity:.8; margin-top:3%}
-.bar{height:3px; background:#3A342C; border-radius:3px; overflow:hidden}
-.bar i{display:block; height:100%; width:34%; background:var(--brand)}
-.app__list{background:#24201B; padding:8% 6%; display:flex; flex-direction:column; gap:3%; overflow:hidden}
-.app__list b{font-weight:600; color:#fff; margin-bottom:2%}
-.mod{display:flex; gap:5%; align-items:center; padding:4% 4%; border-radius:4px; background:#2D2822; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.mod em{font-style:normal; color:#B3A895; flex:none}
-.mod span{overflow:hidden; text-overflow:ellipsis}
-.mod.on{background:#6B604F}
-.phone .app{grid-template-columns:1fr; grid-template-rows:auto 1fr; font-size:clamp(5px, .8vw, 7px)}
-.phone .cover{aspect-ratio:1/1; flex:none; margin:8% 8% 0; padding:12%}
-.cover .logo{width:100%; aspect-ratio:930/600}
-.phone .app__list{background:transparent; padding:8%}
+.shot{position:relative}
+.shot > .media{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center}
+.shot.has-media > :not(.media){visibility:hidden}
 
 /* ===== BLOCO 3 ===== */
 .reel{
@@ -240,7 +271,7 @@ body{padding-top:calc(80px + env(safe-area-inset-top, 0px))}
 .bianca > *{min-width:0}
 @media (max-width:860px){ .bianca{grid-template-columns:1fr} }
 .bianca__photo{aspect-ratio:4/5; position:sticky; top:24px}
-@media (max-width:860px){ .bianca__photo{position:static; aspect-ratio:1/1} }
+@media (max-width:860px){ .bianca__photo{position:relative; aspect-ratio:1/1} }
 .role{color:var(--muted); font-style:italic; margin-top:6px}
 .pull{
   border-left:0; font-size:1.25rem; font-weight:600; line-height:1.4; color:var(--ink);
@@ -318,6 +349,17 @@ body{padding-top:calc(80px + env(safe-area-inset-top, 0px))}
   display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,5vw,56px); align-items:center;
 }
 .offer > *{min-width:0}
+.offer__alert{
+  grid-column:1 / -1; justify-self:center; margin:0;
+  display:inline-flex; align-items:center; gap:12px; text-align:center;
+  background:var(--strike); color:#fff; border-radius:999px; padding:10px 22px;
+  font-weight:700; font-size:clamp(1rem, .85rem + .8vw, 1.375rem); line-height:1.25; letter-spacing:-.01em;
+  text-transform:uppercase; box-shadow:0 12px 30px -14px rgba(201,58,46,.8);
+}
+.offer__alert .nw{white-space:nowrap}
+.pulse{flex:none; width:10px; height:10px; border-radius:50%; background:#fff; animation:pulse 1.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)} 100%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+@media (prefers-reduced-motion:reduce){ .pulse{animation:none} }
 @media (max-width:860px){ .offer{grid-template-columns:1fr} }
 .offer h2{font-size:clamp(1.5rem, 1.1rem + 1.6vw, 2rem)}
 .stackval{list-style:none; margin:24px 0 0; padding:0; display:flex; flex-direction:column}
@@ -386,9 +428,6 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
 <body>
 
 
-<!-- ============ Barra fixa (sem botão de compra) ============ -->
-<div class="topbar"><span class="logo topbar__logo" role="img" aria-label="Piano Pop na Prática"></span></div>
-
 <!-- ============ BLOCO 1 | Primeira dobra ============ -->
 <header class="section section--night hero">
   <div class="wrap">
@@ -425,41 +464,23 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
     </div>
 
     <div class="promise">
-      <div class="devices" aria-label="Aulas do Piano Pop na Prática no notebook e no celular" role="img">
-        <div class="laptop">
-          <div class="laptop__screen">
-            <div class="app">
-              <div class="app__main">
-                <div class="cover">
-                  <span class="logo" role="img" aria-label="Piano Pop na Prática"></span>
-                </div>
-                <div class="bar"><i></i></div>
-              </div>
-              <div class="app__list">
-                <b>Módulos</b>
-                <div class="mod"><em>01</em><span>Comece aqui</span></div>
-                <div class="mod on"><em>02</em><span>Teclado · Beatles</span></div>
-                <div class="mod"><em>03</em><span>Cifras · ABBA</span></div>
-                <div class="mod"><em>04</em><span>Escala · Elton John</span></div>
-                <div class="mod"><em>05</em><span>Jogo 1</span></div>
-                <div class="mod"><em>06</em><span>Teclas pretas · Coldplay</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="laptop__base"></div>
-        </div>
-        <div class="phone">
-          <div class="app">
-            <div class="cover">
-                  <span class="logo" role="img" aria-label="Piano Pop na Prática"></span>
-            </div>
-            <div class="app__list">
-              <div class="mod on"><em>02</em><span>Beatles</span></div>
-              <div class="mod"><em>03</em><span>ABBA</span></div>
-              <div class="mod"><em>04</em><span>Elton John</span></div>
-              <div class="mod"><em>06</em><span>Coldplay</span></div>
-            </div>
-          </div>
+      <!-- Mosaico das aulas: cada quadro usa a capa aulas/aula-XX.jpg; a posição/tamanho de cada um fica no CSS (.tile:nth-child) -->
+      <div class="mosaic-wrap">
+        <div class="mosaic" id="mosaic">
+          <div class="tile tile--big" data-img="aulas/aula-01.jpg" tabindex="0" role="img" aria-label="Módulo 1: Comece aqui (Boas-vindas)"><em>01</em><b>Comece aqui</b><small>Boas-vindas</small></div>
+          <div class="tile" data-img="aulas/aula-02.jpg" tabindex="0" role="img" aria-label="Módulo 2: Conhecendo o Teclado (Beatles)"><em>02</em><b>Conhecendo o Teclado</b><small>Beatles</small></div>
+          <div class="tile" data-img="aulas/aula-03.jpg" tabindex="0" role="img" aria-label="Módulo 3: Primeiros Acompanhamentos (ABBA)"><em>03</em><b>Primeiros Acompanhamentos</b><small>ABBA</small></div>
+          <div class="tile" data-img="aulas/aula-04.jpg" tabindex="0" role="img" aria-label="Módulo 4: A Escala que Organiza o Piano (Elton John)"><em>04</em><b>A Escala que Organiza o Piano</b><small>Elton John</small></div>
+          <div class="tile game" data-img="aulas/aula-05.jpg" tabindex="0" role="img" aria-label="Módulo 5: Jogo 1 (Fixando as bases)"><em>05</em><b>Jogo 1</b><small>Fixando as bases</small></div>
+          <div class="tile" data-img="aulas/aula-06.jpg" tabindex="0" role="img" aria-label="Módulo 6: Entendendo as Teclas Pretas (Coldplay)"><em>06</em><b>Entendendo as Teclas Pretas</b><small>Coldplay</small></div>
+          <div class="tile" data-img="aulas/aula-07.jpg" tabindex="0" role="img" aria-label="Módulo 7: O Compasso Ternário (Marisa Monte)"><em>07</em><b>O Compasso Ternário</b><small>Marisa Monte</small></div>
+          <div class="tile" data-img="aulas/aula-08.jpg" tabindex="0" role="img" aria-label="Módulo 8: Piano Acompanhando com Solo (Paralamas do Sucesso)"><em>08</em><b>Piano Acompanhando com Solo</b><small>Paralamas do Sucesso</small></div>
+          <div class="tile game" data-img="aulas/aula-09.jpg" tabindex="0" role="img" aria-label="Módulo 9: Jogo 2 (Reforçando o que você aprendeu)"><em>09</em><b>Jogo 2</b><small>Reforçando o que você aprendeu</small></div>
+          <div class="tile" data-img="aulas/aula-10.jpg" tabindex="0" role="img" aria-label="Módulo 10: As 3 Notas do Acorde (Roberto Carlos)"><em>10</em><b>As 3 Notas do Acorde</b><small>Roberto Carlos</small></div>
+          <div class="tile" data-img="aulas/aula-11.jpg" tabindex="0" role="img" aria-label="Módulo 11: I IV e V (Rock'n Roll)"><em>11</em><b>I IV e V</b><small>Rock'n Roll</small></div>
+          <div class="tile" data-img="aulas/aula-12.jpg" tabindex="0" role="img" aria-label="Módulo 12: Piano Solo na Prática (Adele)"><em>12</em><b>Piano Solo na Prática</b><small>Adele</small></div>
+          <div class="tile" data-img="aulas/aula-13.jpg" tabindex="0" role="img" aria-label="Módulo 13: Coordenando os Dedos das Mãos (Módulo complementar)"><em>13</em><b>Coordenando os Dedos das Mãos</b><small>Módulo complementar</small></div>
+          <div class="tile" data-img="aulas/aula-14.jpg" tabindex="0" role="img" aria-label="Módulo 14: Encontros ao Vivo (Gravações)"><em>14</em><b>Encontros ao Vivo</b><small>Gravações</small></div>
         </div>
       </div>
 
@@ -545,7 +566,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
 
     <div class="suite" role="img" aria-label="Plataforma do Piano Pop na Prática no notebook, tablet e celular">
       <div class="suite__laptop">
-        <div class="laptop__screen">
+        <div class="laptop__screen shot" data-img="plataforma/notebook.jpg">
           <div class="ma">
             <div class="ma__top"><span class="logo"></span><span class="ma__prog"><i></i></span></div>
             <div class="ma__title">Módulos</div>
@@ -555,7 +576,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
         <div class="laptop__base"></div>
       </div>
       <div class="suite__tablet">
-        <div class="tab">
+        <div class="tab shot" data-img="plataforma/tablet.jpg">
           <div class="les__video"><div class="kb"><i class="k b hl"></i><i class="k b"></i><i class="k hl"></i><i class="k b"></i><i class="k b hl"></i><i class="k b"></i><i class="k"></i><i class="k b"></i><i class="k b"></i><i class="k"></i><i class="k b"></i><i class="k b"></i><i class="k b"></i><i class="k"></i></div></div>
           <div class="les__info">
             <small>Módulo 03 · ABBA</small>
@@ -565,7 +586,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
         </div>
       </div>
       <div class="suite__phone">
-        <div class="ph-scr">
+        <div class="ph-scr shot" data-img="plataforma/celular.jpg">
           <small>Jogo 1</small>
           <b>Qual é esta nota?</b>
           <div class="kb kb--game"><i class="k b"></i><i class="k b"></i><i class="k"></i><i class="k b"></i><i class="k b hl"></i><i class="k b"></i><i class="k"></i></div>
@@ -600,6 +621,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
     </div>
 
     <div class="offer">
+      <p class="offer__alert"><span class="pulse" aria-hidden="true"></span><span><span class="nw">Somente agora.</span> <span class="nw">Somente nesta tela.</span></span></p>
       <div>
         <h2>Hoje você entra no Piano Pop na Prática por:</h2>
         <ul class="stackval">
@@ -788,6 +810,19 @@ var CONFIG = {
     var d = (CONFIG.depoimentos || [])[+el.getAttribute("data-dep")]; if (!d) return;
     el.textContent = el.getAttribute("data-k") === "idade" ? d.idade + " anos" : d.nome;
   });
+
+  // Mosaico: no celular, tocar numa aula aumenta ela; tocar de novo (ou fora) volta
+  var mosaic = document.getElementById("mosaic");
+  if (mosaic) {
+    var clearOn = function(){ mosaic.classList.remove("has-on"); mosaic.querySelectorAll(".is-on").forEach(function(t){ t.classList.remove("is-on"); }); };
+    mosaic.addEventListener("click", function(e){
+      if (window.matchMedia("(hover:hover)").matches) return;
+      var t = e.target.closest(".tile"); if (!t) return;
+      var was = t.classList.contains("is-on"); clearOn();
+      if (!was) { t.classList.add("is-on"); mosaic.classList.add("has-on"); }
+    });
+    document.addEventListener("click", function(e){ if (!mosaic.contains(e.target)) clearOn(); });
+  }
 
   // Carrossel de alunos
   var reel = document.getElementById("reel");
