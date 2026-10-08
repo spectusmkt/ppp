@@ -159,9 +159,9 @@ a{color:inherit}
 .check svg{width:16px; height:16px}
 
 /* Mosaico das aulas */
-.mosaic{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-flow:dense; gap:10px; max-width:560px; margin-inline:auto; width:100%}
+.mosaic{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-flow:dense; gap:8px; max-width:560px; margin-inline:auto; width:100%; padding:10px; background:#181818; border-radius:16px; box-shadow:0 24px 50px -28px rgba(34,30,25,.7)}
 .tile{
-  position:relative; aspect-ratio:1/1; border-radius:12px; overflow:hidden; min-width:0;
+  position:relative; aspect-ratio:16/9; border-radius:10px; overflow:hidden; min-width:0;
   background:linear-gradient(140deg,#A89C88,#6B604F); color:#fff;
   display:flex; flex-direction:column; justify-content:flex-end; gap:2px; padding:10px;
   box-shadow:0 14px 28px -18px rgba(34,30,25,.6);
@@ -169,7 +169,7 @@ a{color:inherit}
 .tile:nth-child(3n+2){background:linear-gradient(140deg,#8E8270,#4E463B)}
 .tile:nth-child(3n){background:linear-gradient(140deg,#B7AC99,#7C705E)}
 .tile.game{background:linear-gradient(140deg,#3B342C,#221E19)}
-.tile--big{grid-column:span 2; grid-row:span 2; padding:16px}
+.tile--big{grid-column:span 2; grid-row:span 2; aspect-ratio:auto; padding:16px}
 .tile em{font-style:normal; font-weight:700; font-size:1.5rem; line-height:1; opacity:.92}
 .tile b{font-weight:600; font-size:.75rem; line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .tile small{font-size:.6875rem; opacity:.8; line-height:1.2}
@@ -178,7 +178,7 @@ a{color:inherit}
 .tile--big small{font-size:.8125rem}
 .tile > .media{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
 .tile.has-media > :not(.media){visibility:hidden}
-@media (max-width:420px){ .mosaic{gap:8px} .tile{padding:8px} .tile b{font-size:.6875rem} .tile small{display:none} .tile--big small{display:block} }
+@media (max-width:420px){ .mosaic{gap:5px; padding:6px; border-radius:12px} .tile{border-radius:6px} .tile{padding:8px} .tile b{font-size:.6875rem} .tile small{display:none} .tile--big small{display:block} }
 
 /* Telas com print real da plataforma */
 .laptop__screen{
@@ -421,8 +421,8 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
     <div class="promise">
       <!-- Mosaico das aulas: cada quadro troca pela capa real quando existir o arquivo aulas/aula-XX.jpg -->
       <div class="mosaic" role="img" aria-label="Mosaico das aulas do Piano Pop na Prática">
-        <div class="tile" data-img="aulas/aula-01.jpg"><em>01</em><b>Comece aqui</b><small>Boas-vindas</small></div>
-        <div class="tile tile--big" data-img="aulas/aula-02.jpg"><em>02</em><b>Conhecendo o Teclado</b><small>Beatles</small></div>
+        <div class="tile tile--big" data-img="aulas/aula-01.jpg"><em>01</em><b>Comece aqui</b><small>Boas-vindas</small></div>
+        <div class="tile" data-img="aulas/aula-02.jpg"><em>02</em><b>Conhecendo o Teclado</b><small>Beatles</small></div>
         <div class="tile" data-img="aulas/aula-03.jpg"><em>03</em><b>Primeiros Acompanhamentos</b><small>ABBA</small></div>
         <div class="tile" data-img="aulas/aula-04.jpg"><em>04</em><b>A Escala que Organiza o Piano</b><small>Elton John</small></div>
         <div class="tile game" data-img="aulas/aula-05.jpg"><em>05</em><b>Jogo 1</b><small>Fixando as bases</small></div>
