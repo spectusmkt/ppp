@@ -5,6 +5,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Piano Pop na Prática</title>
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <!-- Meta Pixel -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -116,6 +120,9 @@ a{color:inherit}
 
 .hero{padding-block:clamp(28px, 5vw, 48px) clamp(48px, 7vw, 80px)}
 .hero h1{max-width:680px; margin-inline:auto; text-align:center}
+/* palavras-chave em destaque na headline */
+.hero h1 .hl{color:#F2C76E}
+.hero h1 .nw{white-space:nowrap}
 .vsl{
   position:relative; width:100%; max-width:860px; margin:32px auto 0;
   aspect-ratio:16/9; border-radius:18px; overflow:hidden;
@@ -451,7 +458,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
 <!-- ============ BLOCO 1 | Primeira dobra ============ -->
 <header class="section section--night hero">
   <div class="wrap">
-    <h1>Assista e descubra como tocar a sua primeira música no piano ainda hoje, mesmo sem nunca ter tocado.</h1>
+    <h1>Assista e descubra como <span class="hl">tocar a sua primeira música</span> no piano <span class="hl nw">ainda hoje</span>, mesmo sem nunca ter tocado.</h1>
 
     <div class="vsl-v">
       <vturb-smartplayer id="vid-6ac568f5d17532a40e2f834e" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
