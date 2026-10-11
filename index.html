@@ -236,27 +236,47 @@ a{color:inherit}
 .shot.has-media > :not(.media){visibility:hidden}
 
 /* ===== BLOCO 3 ===== */
-.reel{
-  display:grid; grid-auto-flow:column; grid-auto-columns:min(240px, 68%); gap:16px;
-  overflow-x:auto; scroll-snap-type:x mandatory; padding:4px 2px 16px; margin-top:40px;
-  scrollbar-width:thin;
+/* Carrossel em triângulo de prints */
+.tri{position:relative; margin-top:40px; outline:none; touch-action:pan-y; user-select:none; -webkit-user-select:none}
+.tri__stage{position:relative; height:clamp(380px, 62vw, 600px); overflow:hidden}
+.tri__item{
+  position:absolute; top:50%; left:50%; margin:0; width:clamp(230px, 34vw, 400px);
+  transform:translate(-50%,-50%) scale(.5); opacity:0; pointer-events:none;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1), opacity .45s, filter .45s;
+  border-radius:16px; overflow:hidden; background:#fff;
+  box-shadow:0 24px 50px -24px rgba(34,30,25,.55);
 }
-.reel > *{scroll-snap-align:start; min-width:0}
-.reel__vid{aspect-ratio:9/16; border-radius:var(--radius)}
-.reel__cap{margin-top:10px; font-size:.95rem}
-.reel__cap strong{display:block}
-.reel__cap span{color:var(--muted); font-size:var(--fs-small)}
-.reel-nav{display:flex; gap:10px; justify-content:flex-end; margin-top:4px}
-.reel-nav button{
-  width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--paper);
-  color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center;
+.tri__item img{display:block; width:100%; height:auto}
+.tri__item[data-pos="0"]{transform:translate(-50%,-50%) scale(1); opacity:1; z-index:5; pointer-events:auto}
+.tri__item[data-pos="-1"]{transform:translate(-112%,-50%) scale(.78); opacity:1; z-index:4; filter:brightness(.92); pointer-events:auto; cursor:pointer}
+.tri__item[data-pos="1"]{transform:translate(12%,-50%) scale(.78); opacity:1; z-index:4; filter:brightness(.92); pointer-events:auto; cursor:pointer}
+.tri__item[data-pos="-2"]{transform:translate(-158%,-50%) scale(.58); opacity:.85; z-index:3; filter:brightness(.85); pointer-events:auto; cursor:pointer}
+.tri__item[data-pos="2"]{transform:translate(58%,-50%) scale(.58); opacity:.85; z-index:3; filter:brightness(.85); pointer-events:auto; cursor:pointer}
+.tri__btn{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:6;
+  width:46px; height:46px; border-radius:50%; border:1px solid var(--line); background:var(--paper); color:var(--ink);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px -10px rgba(34,30,25,.5);
 }
-.reel-nav button:hover{border-color:var(--ink)}
-.reel-nav button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
-.reel-nav svg{width:18px; height:18px}
-.prints{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px; margin-top:32px}
-.prints .ph{aspect-ratio:4/5}
-@media (max-width:700px){ .prints{grid-template-columns:repeat(2, minmax(0,1fr))} .prints .ph:last-child{display:none} }
+.tri__btn svg{width:20px; height:20px}
+.tri__btn--prev{left:0}
+.tri__btn--next{right:0}
+.tri__btn:hover{border-color:var(--ink)}
+.tri__btn:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.tri__dots{display:flex; justify-content:center; flex-wrap:wrap; gap:6px; margin-top:18px}
+.tri__dots i{width:7px; height:7px; border-radius:50%; background:var(--line); transition:background .3s, width .3s}
+.tri__dots i.on{background:var(--brand); width:20px; border-radius:9px}
+@media (max-width:640px){
+  .tri__stage{height:clamp(360px, 118vw, 520px)}
+  .tri__item{width:62vw}
+  .tri__item[data-pos="-1"]{transform:translate(-96%,-50%) scale(.72)}
+  .tri__item[data-pos="1"]{transform:translate(-4%,-50%) scale(.72)}
+  .tri__item[data-pos="-2"]{transform:translate(-128%,-50%) scale(.5); opacity:.7}
+  .tri__item[data-pos="2"]{transform:translate(28%,-50%) scale(.5); opacity:.7}
+  .tri__btn{width:40px; height:40px; top:auto; bottom:-62px; transform:none}
+  .tri__btn--prev{left:calc(50% - 52px)} .tri__btn--next{right:calc(50% - 52px)}
+  .tri__dots{margin-top:76px}
+}
+@media (prefers-reduced-motion:reduce){ .tri__item{transition:none} }
 
 /* ===== BLOCO 4 ===== */
 .ident{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px}
@@ -503,24 +523,32 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
       <p class="lead">Gente que começou do zero, que já tinha desistido antes ou que achava que já tinha passado da idade de aprender.</p>
     </div>
 
-    <div class="reel" id="reel" tabindex="0" aria-label="Vídeos de alunos tocando">
-      <figure style="margin:0"><div class="ph reel__vid" data-video="ppp-depoimento-1.mp4" data-poster="ppp-depoimento-1-capa.jpg"><span>Vídeo do aluno</span></div><figcaption class="reel__cap"><strong data-dep="0" data-k="nome">Nome do aluno</strong><span data-dep="0" data-k="idade">[idade] anos</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph reel__vid" data-video="ppp-depoimento-2.mp4" data-poster="ppp-depoimento-2-capa.jpg"><span>Vídeo do aluno</span></div><figcaption class="reel__cap"><strong data-dep="1" data-k="nome">Nome do aluno</strong><span data-dep="1" data-k="idade">[idade] anos</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph reel__vid" data-video="ppp-depoimento-3.mp4" data-poster="ppp-depoimento-3-capa.jpg"><span>Vídeo do aluno</span></div><figcaption class="reel__cap"><strong data-dep="2" data-k="nome">Nome do aluno</strong><span data-dep="2" data-k="idade">[idade] anos</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph reel__vid" data-video="ppp-depoimento-4.mp4" data-poster="ppp-depoimento-4-capa.jpg"><span>Vídeo do aluno</span></div><figcaption class="reel__cap"><strong data-dep="3" data-k="nome">Nome do aluno</strong><span data-dep="3" data-k="idade">[idade] anos</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph reel__vid" data-video="ppp-depoimento-5.mp4" data-poster="ppp-depoimento-5-capa.jpg"><span>Vídeo do aluno</span></div><figcaption class="reel__cap"><strong data-dep="4" data-k="nome">Nome do aluno</strong><span data-dep="4" data-k="idade">[idade] anos</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph reel__vid" data-video="ppp-depoimento-6.mp4" data-poster="ppp-depoimento-6-capa.jpg"><span>Vídeo do aluno</span></div><figcaption class="reel__cap"><strong data-dep="5" data-k="nome">Nome do aluno</strong><span data-dep="5" data-k="idade">[idade] anos</span></figcaption></figure>
+    <!-- Carrossel em triângulo: o print do meio fica grande; a ordem abaixo é a ordem de exibição -->
+    <div class="tri" id="tri" tabindex="0" aria-roledescription="carrossel" aria-label="Prints de mensagens de alunos">
+      <div class="tri__stage">
+        <figure class="tri__item"><img src="depoimentos/fernanda.jpg" alt="Fernanda: “já consigo tocar Beatles. Parecia impossível!”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/marcos-piano.jpg" alt="Marcos tocou no piano da sala de espera de um hospital" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/fernando-familia.jpg" alt="Fernando tocando para a família no Dia dos Pais" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/benedita-cursos.jpg" alt="Benedita: “achei que ia desistir, agora não vou mais”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/valdir-cursos.jpg" alt="Valdir: “já fiz outros cursos, não tive o resultado que estou tendo agora”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/marcos-historia.jpg" alt="Marcos, 53 anos, nunca tinha feito aula de música" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/mari-cursos.jpg" alt="Mari: “comprei mais de 10 cursos”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/valdir-73.jpg" alt="Valdir, 73 anos: aprender tocando a música" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/celia-didatica.jpg" alt="Celia: “a Bianca se destaca na didática”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/marcos-53.jpg" alt="Marcos: “nunca toquei nenhum instrumento”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/mari-finalmente.jpg" alt="Mari: “finalmente estou aprendendo com alguém que sabe ensinar”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/marcos-partitura.jpg" alt="Marcos: “eu achava que tinha que ficar preso às partituras”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/benedita-luz.jpg" alt="Benedita: “vi uma luz no fim do túnel”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/celia-mari-luz.jpg" alt="Mari: “não me canso de dizer o quão didática é a Bianca”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/fernando-grupo.jpg" alt="Fernando: “aqui a gente acelera o aprendizado”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/marcos-apresentacao.jpg" alt="Marcos: “consegui acompanhar e tocar as músicas”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/marize.jpg" alt="Marize: “professora dedicada”" loading="lazy" decoding="async" width="720" height="960"></figure>
+        <figure class="tri__item"><img src="depoimentos/miriam.jpg" alt="Miriam gravou a música que está estudando" loading="lazy" decoding="async" width="720" height="960"></figure>
+      </div>
+      <button type="button" class="tri__btn tri__btn--prev" id="tri-prev" aria-label="Depoimento anterior"><svg viewBox="0 0 20 20" fill="none"><path d="M12.5 4.5L7 10l5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="tri__btn tri__btn--next" id="tri-next" aria-label="Próximo depoimento"><svg viewBox="0 0 20 20" fill="none"><path d="M7.5 4.5L13 10l-5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
-    <div class="reel-nav">
-      <button type="button" id="reel-prev" aria-label="Vídeo anterior"><svg viewBox="0 0 20 20" fill="none"><path d="M12.5 4.5L7 10l5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button type="button" id="reel-next" aria-label="Próximo vídeo"><svg viewBox="0 0 20 20" fill="none"><path d="M7.5 4.5L13 10l-5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </div>
-
-    <div class="prints">
-      <div class="ph ph--contain" data-img="ppp-print-1.jpg"><span>Print de mensagem de aluno</span></div>
-      <div class="ph ph--contain" data-img="ppp-print-2.jpg"><span>Print de mensagem de aluno</span></div>
-      <div class="ph ph--contain" data-img="ppp-print-3.jpg"><span>Print de mensagem de aluno</span></div>
-    </div>
+    <div class="tri__dots" id="tri-dots" aria-hidden="true"></div>
 
     <div class="btn-row" style="margin-top:44px"><a class="btn js-checkout" href="#oferta">Quero tocar piano</a></div>
   </div>
@@ -802,10 +830,6 @@ var CONFIG = {
     v.addEventListener("loadedmetadata", function(){ box.appendChild(v); box.classList.add("has-media"); }, { once: true });
     v.src = base + box.getAttribute("data-video") + "#t=0.1";
   });
-  // só um depoimento tocando por vez
-  document.addEventListener("play", function(e){
-    document.querySelectorAll(".reel video").forEach(function(o){ if (o !== e.target) o.pause(); });
-  }, true);
   document.querySelectorAll("[data-dep]").forEach(function(el){
     var d = (CONFIG.depoimentos || [])[+el.getAttribute("data-dep")]; if (!d) return;
     el.textContent = el.getAttribute("data-k") === "idade" ? d.idade + " anos" : d.nome;
@@ -824,11 +848,33 @@ var CONFIG = {
     document.addEventListener("click", function(e){ if (!mosaic.contains(e.target)) clearOn(); });
   }
 
-  // Carrossel de alunos
-  var reel = document.getElementById("reel");
-  function step(){ var f = reel.querySelector("figure"); return f ? f.getBoundingClientRect().width + 16 : 260; }
-  document.getElementById("reel-prev").addEventListener("click", function(){ reel.scrollBy({left:-step(), behavior:"smooth"}); });
-  document.getElementById("reel-next").addEventListener("click", function(){ reel.scrollBy({left: step(), behavior:"smooth"}); });
+  // Carrossel em triângulo dos prints
+  (function(){
+    var tri = document.getElementById("tri"); if (!tri) return;
+    var items = [].slice.call(tri.querySelectorAll(".tri__item")), n = items.length, cur = 0, timer = null;
+    var dots = document.getElementById("tri-dots");
+    items.forEach(function(){ dots.appendChild(document.createElement("i")); });
+    function render(){
+      items.forEach(function(el, i){
+        var d = ((i - cur) % n + n) % n; if (d > n / 2) d -= n;
+        el.setAttribute("data-pos", Math.abs(d) <= 2 ? d : "hide");
+        el.setAttribute("aria-hidden", d === 0 ? "false" : "true");
+      });
+      [].forEach.call(dots.children, function(dot, i){ dot.classList.toggle("on", i === cur); });
+    }
+    function go(k){ cur = ((cur + k) % n + n) % n; render(); }
+    function play(){ stop(); if (!window.matchMedia("(prefers-reduced-motion:reduce)").matches) timer = setInterval(function(){ go(1); }, 4500); }
+    function stop(){ if (timer) clearInterval(timer); timer = null; }
+    document.getElementById("tri-prev").addEventListener("click", function(){ go(-1); play(); });
+    document.getElementById("tri-next").addEventListener("click", function(){ go(1); play(); });
+    items.forEach(function(el){ el.addEventListener("click", function(){ var d = +el.getAttribute("data-pos"); if (d) { go(d); play(); } }); });
+    tri.addEventListener("keydown", function(e){ if (e.key === "ArrowLeft") { go(-1); play(); } if (e.key === "ArrowRight") { go(1); play(); } });
+    tri.addEventListener("mouseenter", stop); tri.addEventListener("mouseleave", play);
+    var x0 = null;
+    tri.addEventListener("touchstart", function(e){ x0 = e.touches[0].clientX; stop(); }, {passive:true});
+    tri.addEventListener("touchend", function(e){ if (x0 == null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; play(); });
+    render(); play();
+  })();
 })();
 </script>
 
