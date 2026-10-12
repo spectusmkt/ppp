@@ -809,7 +809,7 @@ var CONFIG = {
     if (shown) return; shown = true;
     document.querySelectorAll(".esconder").forEach(function(el){ el.classList.remove("esconder"); el.classList.add("reveal-in"); });
     if (!seenBefore) px("trackCustom", "VSL_Oferta");
-    try { localStorage.setItem(KEY, "1"); } catch(e){}
+    if (CONFIG.delayAtivo) { try { localStorage.setItem(KEY, "1"); } catch(e){} }
   }
   var seen = false; try { seen = localStorage.getItem(KEY) === "1"; } catch(e){}
   var seenBefore = seen;
