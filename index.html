@@ -484,7 +484,7 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
       <p class="vsl-note" id="vsl-note" hidden>Prévia: o player da Vturb só carrega na página publicada no seu domínio.</p>
     </div>
 
-    <!-- Tudo com a classe "esconder" aparece só aos 18:55 do vídeo -->
+    <!-- Tudo com a classe "esconder" aparece só aos 18:58 do vídeo -->
     <div class="esconder">
       <div class="after-offer">
         <a class="btn js-checkout" href="#oferta">Quero tocar minha primeira música</a>
@@ -747,8 +747,8 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
    CONFIGURAÇÃO — troque só estes valores
    ========================================================= */
 var CONFIG = {
-  delayAtivo: false,          // true = esconde as dobras até o tempo abaixo | false = mostra tudo (suspenso)
-  revealAfterSeconds: 1135,   // 18:55 do vídeo = 18*60 + 55
+  delayAtivo: true,           // true = esconde as dobras até o tempo abaixo | false = mostra tudo (suspenso)
+  revealAfterSeconds: 1138,   // 18:58 do vídeo = 18*60 + 58
   checkoutUrl: "https://pay.hotmart.com/C104108087F?off=ot7cpxjg",
   whatsappUrl: "https://wa.me/5511998362480",
   alunos: "900+",              // ex.: "4.000+"
@@ -815,7 +815,7 @@ var CONFIG = {
   var seenBefore = seen;
   if (seen || !CONFIG.delayAtivo) { seenBefore = true; reveal(); }
 
-  // Player Vturb (embed oficial) + liberação aos 18:55 do vídeo
+  // Player Vturb (embed oficial) + liberação aos 18:58 do vídeo
   var s = document.createElement("script");
   s.src = "https://scripts.converteai.net/3b202027-84cd-4a32-b05f-0770c0097dd0/players/6ac568f5d17532a40e2f834e/v4/player.js";
   s.async = true;
