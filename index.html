@@ -139,6 +139,8 @@ a{color:inherit}
 
 .hero{padding-block:clamp(28px, 5vw, 48px) clamp(48px, 7vw, 80px)}
 .hero h1{max-width:680px; margin-inline:auto; text-align:center}
+.sr-only{position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+.hero .sr-only + .vsl-v{margin-top:0}
 /* palavras-chave em destaque na headline */
 .hero h1 .hl{color:#F2C76E}
 .hero h1 .nw{white-space:nowrap}
@@ -477,7 +479,8 @@ footer{padding:28px 20px 40px; text-align:center; color:var(--muted); font-size:
 <!-- ============ BLOCO 1 | Primeira dobra ============ -->
 <header class="section section--night hero">
   <div class="wrap">
-    <h1>Assista e descubra como <span class="hl">tocar a sua primeira música</span> no piano <span class="hl nw">ainda hoje</span>, mesmo sem nunca ter tocado.</h1>
+    <!-- Headline visível desligada durante o teste de headlines da VTurb (fica só para leitores de tela e Google). Para voltar, remova a classe "sr-only". -->
+    <h1 class="sr-only">Assista e descubra como <span class="hl">tocar a sua primeira música</span> no piano <span class="hl nw">ainda hoje</span>, mesmo sem nunca ter tocado.</h1>
 
     <div class="vsl-v">
       <vturb-smartplayer id="vid-6ac568f5d17532a40e2f834e" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
